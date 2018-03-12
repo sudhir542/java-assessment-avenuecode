@@ -1,129 +1,135 @@
-# Avenue Code Java Assessment #
+## How to Run 
 
-Objective
-=========
-A fictional client has an existing Micro Service to fetch order and product information. Your job is to add a new `Search REST API` to display a list of potential matches. This exercise is expected to take around 3 to 4 hours of coding, but you are free to use as much time as you need.
+This application is packaged as a jar which has Tomcat 8 embedded. No Tomcat or JBoss installation is necessary. You run it using the ```java -jar``` command.
 
-Evaluation areas
-=========
-Your code will be evaluated in the following areas: 
-Configuration, Architecture, Logic, Exception Handling, Logs, Spring, Persistence, REST, Tests, Documentation, and JAVA.
+* Clone this repository 
+* Make sure you are using JDK 1.8 and Maven 3.x
+* You can build the project and run the tests by running ```mvn clean package```
+* Once successfully built, you can run the service by one of these two methods:
+```
+        java -jar -Dspring.profiles.active=orders-test target/orders-0.0.1-SNAPSHOT.jar
+or
+        mvn spring-boot:run -Drun.arguments="spring.profiles.active=orders-test"
+```
+* Check the stdout to make sure no exceptions are thrown
 
-Requirements
-============
-### Task 1) ###
-Make the existing application runnable. We recommend you to use spring-boot for it, but you can use anything you want in order to make the server up and running and ready to receive the HTTP requests. The server should be started on port 8088.
+Once the application runs you should see something like this
 
-### Task 2) ###
-The existing Micro Service to fetch order and product information has been provided for you. Your goal is to add a new generic `Search REST API` to retrieve all relevant information matching the following criteria:
-
-#### Criteria 1: Filter all the orders which are shipped. ####
- * This search criteria should be applied on the `status` column of the `orders` table.
- * The value of the `status` should be `SHIPPED`.
-
-#### Criteria 2: Filter all the orders where discount has been applied. ####
- * This search criteria should be applied on the `discount` column of the `orders` table.
-
-#### Criteria 3: Filter all the orders having more that two products in the transaction. ####
-```json
- eg:
- {
-         "orderNumber": "RTL_1003",
-         "discount": 19.99,
-         "taxPercent": 8.5,
-         "total": 139.97,
-         "totalTax": 11.89,
-         "grandTotal": 131.87,
-         "status": "SHIPPED",
-         "products": [
-             {
-                 "upc": "1358743283",
-                 "sku": "7394650110003",
-                 "description": "Polo Shirt",
-                 "price": 19.99
-             },
-             {
-                 "upc": "1458843283",
-                 "sku": "7394750120000",
-                 "description": "Floral Swing Skirt",
-                 "price": 69.99
-             },
-             {
-                 "upc": "1258793283",
-                 "sku": "7394950140000",
-                 "description": "True Skinny Jeans",
-                 "price": 49.99
-             }
-         ]
-     }
+```
+2018-03-11 19:38:51.694  INFO 42281 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8088 (http)
+2018-03-11 19:38:51.706  INFO 42281 --- [           main] com.avenuecode.orders.OrdersApplication  : Started OrdersApplication in 11.659 seconds (JVM running for 12.362)
+2018-03-11 19:38:51.706  INFO 42281 --- [           main] com.avenuecode.orders.OrdersApplication  : Running orders application.
+2018-03-11 19:39:28.005  INFO 42281 --- [nio-8088-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2018-03-11 19:39:28.005  INFO 42281 --- [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2018-03-11 19:39:28.042  INFO 42281 --- [nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 37 ms
 ```
 
-#### Criteria 4: Filter all the products whose price is more than $30. ####
- * This search criteria should be applied on the `price` column of the `products` table.
+## About the Service
 
-### Task 3) ###
- * Add JUnit tests for all the existing classes in the workspace. Also, make sure to test-drive the new code being added.
-
-### Task 4) ###
- * Add **Spring Integration Tests** for all the `API endpoints`.
-
-### Note: You are free to refactor existing codebase to fulfil these requirements. ###
-
-Existing API Endpoints
-======================
-1) List Orders:
-   **[GET]** `http://localhost:8088/orders`
-
-2) Fetch Order Details:
-   **[GET]** `http://localhost:8088/orders/{order_id}`
-
-3) List Products:
-   **[GET]** `http://localhost:8088/products`
-
-4) Fetch Product Details:
-   **[GET]** `http://localhost:8088/products/{product_id}`
-
-Technical Information
-=====================
- * You should have Java 8, Maven and Git installed.
- * The sample data has been pre-loaded so that the new `Search API` can be tested. Please refer to `data-h2.sql`.
-
-Tech Stack
-==========
- * Java 8.x
- * Maven 3.x
- * Spring Framework 4.x
- * Spring Boot 1.5.6
- * Hibernate
- * JPA
- * H2 database
- * JUnit 4.x
- * Mockito 2.x
- * Hamcrest
- * Spring Integration Tests
+The service is just a simple Orders Application REST services. It uses an in-memory database (H2) to store the data. You can also do with a relational database like MySQL or PostgreSQL. If your database connection properties work, you can call some REST endpoints defined in ```com.avenuecode.orders.resource``` on **port 8088**. (see below)
  
-Delivery Instructions
-=====================
+Here is what this little application demonstrates: 
 
-1) You must provide your BitBucket username. A free BitBucket account can be created at http://bitbucket.org
+* Full integration with the latest **Spring** Framework: inversion of control, dependency injection, etc.
+* Packaging as a single jar with embedded container (tomcat 8): No need to install a container separately on the host just run using the ``java -jar`` command
+* Writing a RESTful service using annotation: supports only JSON response; 
+* Exception mapping from application exceptions to the right HTTP response with exception details in the body
+* *Spring Data* Integration with JPA/Hibernate with just a few lines of configuration and familiar annotations. 
+* Automatic CRUD functionality against the data source using Spring *Repository* pattern
+* Demonstrates MockMVC test framework with associated libraries
+* All APIs are "self-documented" by Swagger2 using annotations 
 
-2) The recruiter will give you read permission to a repository named **java-assessment**, at https://bitbucket.org/ac-recruitment/java-assessment
+Here are some endpoints you can call:
 
-3) You must fork this repository into a private repository on your own account and push your code in there.
+## Orders Related Services
+### Retrieve a list of orders
 
-4) Once finished, you must give the user **ac-recruitment** read permission on your repository so that you can be evaluated. Then, please contact back your recruiter and he will get an engineer to evaluate your test.
+```
+http://localhost:8088/orders
 
-5) After you are evaluated, the recruiter will remove your read permission from the original repository.
+Response: HTTP 200
+```
 
-Format
-======
+### Retrieve a specific order resource
 
-* This assessment must be delivered within 2 days.
-* You must provide a README.txt (plain text) or a README.md (Markdown) file at the root of your repository, explaining:
-    * How to compile and run the application.
-    * How to run the suite of automated tests.
-    * Mention anything that was asked but not delivered and why, and any additional comments.
-* Any questions, please send an email to **recruitment.engineering@avenuecode.com**
+```
+http://localhost:8088/orders/{orderId}
 
-Thank you,
-The AvenueCode Recruiting Team
+Response: HTTP 200
+```
+
+### Retrieve orders based on search=status:shipped
+This search condition will get the orders whose status has been shipped
+
+```
+http://localhost:8088/orders?search=status:shipped
+
+Response: HTTP 200
+```
+
+### Retrieve orders based on search=discount>0
+This search condition will get the orders that have discount greater than 0 or that has discounts
+
+```
+http://localhost:8088/orders?search=discount>0
+
+Response: HTTP 200
+```
+
+### Retrieve orders based on search=products>2
+This search condition will get the orders that have more than 2 products in it
+
+```
+http://localhost:8088/orders?search=products>2
+
+Response: HTTP 200
+```
+
+
+## Products Related Services
+### Retrieve a list of products
+
+```
+http://localhost:8088/products
+
+Response: HTTP 200
+```
+
+### Retrieve a specific product resource
+
+```
+http://localhost:8088/products/{productId}
+
+Response: HTTP 200
+```
+
+### Retrieve orders based on search=price>30
+This search condition will get the products whose price is greater than 30
+
+```
+http://localhost:8088/products?search=price>30
+
+Response: HTTP 200
+```
+
+### To disable information logging and have only error logging since we do not want to hit the production servers with information logs. 
+Please make the below changes on application.yml file
+
+```
+logging:
+  level:
+    ROOT: ERROR
+```
+
+### To view Swagger 2 API docs
+
+Run the server and browse to localhost:8088/swagger-ui.html
+
+### To view your H2 in-memory datbase
+
+The 'retail_order' profile runs on H2 in-memory database. To view and query the database you can browse to http://localhost:8088/h2-console (username is 'avenucode' with password as 'avenuecode'). Make sure you disable this in your production profiles. 
+
+
+
+
+

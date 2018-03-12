@@ -24,6 +24,11 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
+/*
+ * A simple domain entity Order
+ */
+
+
 @Data
 @Entity
 @Table(name = "orders")
@@ -37,13 +42,13 @@ public class Order implements Serializable {
     @JsonIgnore
     private String orderId;
 
-    @Column(unique = true, nullable = false, length = 8)
+	@Column(unique = true, nullable = false, length = 8)
     private String orderNumber;
 
     @Column
     private BigDecimal discount;
 
-    @Column(nullable = false)
+    	@Column(nullable = false)
     private BigDecimal taxPercent;
 
     private BigDecimal total;
@@ -74,7 +79,7 @@ public class Order implements Serializable {
     public BigDecimal getTotalTax() {
         return scaled(getTotal().multiply(taxPercent.divide(new BigDecimal("100"))));
     }
-
+    
     public BigDecimal getGrandTotal() {
         BigDecimal total = this.getTotal().add(getTotalTax());
         if (discount != null) {
@@ -86,5 +91,53 @@ public class Order implements Serializable {
     private BigDecimal scaled(BigDecimal value) {
         return value.setScale(PRECISION, ROUND_FLOOR);
     }
+    
+    public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public BigDecimal getTaxPercent() {
+		return taxPercent;
+	}
+
+	public void setTaxPercent(BigDecimal taxPercent) {
+		this.taxPercent = taxPercent;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
+	}
+	
 
 }

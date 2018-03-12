@@ -1,3 +1,6 @@
+server:
+  port: 8088
+
 spring:
   datasource:
     url: jdbc:h2:mem:retail_order;db_close_on_exit=false
@@ -5,7 +8,9 @@ spring:
     username: avenuecode
     password: avenuecode
     platform: h2
-
+  h2:
+    console:
+      enabled: true
   data:
     jpa:
       repositories:
@@ -13,10 +18,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: true
-
+  profiles: orders-test
+ 
 logging:
   level:
-    ROOT: ERROR
+    ROOT: info
 
-server:
-  port: ${appPort:8088}
