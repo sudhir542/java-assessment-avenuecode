@@ -68,7 +68,15 @@ public class Order implements Serializable {
     )
     private List<Product> products = new ArrayList<>();
 
-    public BigDecimal getTotal() {
+    public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	public BigDecimal getTotal() {
         BigDecimal total = new BigDecimal(ZERO);
         for (Product product : products) {
             total = total.add(product.getPrice());
@@ -91,53 +99,5 @@ public class Order implements Serializable {
     private BigDecimal scaled(BigDecimal value) {
         return value.setScale(PRECISION, ROUND_FLOOR);
     }
-    
-    public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	public BigDecimal getTaxPercent() {
-		return taxPercent;
-	}
-
-	public void setTaxPercent(BigDecimal taxPercent) {
-		this.taxPercent = taxPercent;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public List<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-	public BigDecimal getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(BigDecimal discount) {
-		this.discount = discount;
-	}
-	
 
 }

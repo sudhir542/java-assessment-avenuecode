@@ -8,8 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.avenuecode.orders.OrdersApplication;
@@ -19,39 +21,18 @@ import com.avenuecode.orders.specification.ProductSpecification;
 import com.avenuecode.orders.util.SearchCriteria;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = OrdersApplication.class)
 @ActiveProfiles("orders-test")
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
+        classes = OrdersApplication.class)
+@AutoConfigureMockMvc
+@TestPropertySource(
+        locations = "classpath:application.yml"
+)
 public class ProductSpecificationTest {
 
     @Autowired
     private ProductRepository productRepository;
-
-    private Product firstProduct;
-    private Product secondProduct;
-
-    @Before
-    public void init() {
-
-        List<Product> products = new ArrayList<Product>();
-
-        firstProduct = new Product();
-        firstProduct.setUpc("1257833283");
-        firstProduct.setSku("9394550220002");
-        firstProduct.setProductId("1");
-        firstProduct.setPrice(new BigDecimal(39.99));
-        firstProduct.setDescription("Diva Jeans");
-        products.add(firstProduct);
-        productRepository.save(firstProduct);
-
-        secondProduct = new Product();
-        secondProduct.setUpc("1358743283");
-        secondProduct.setSku("7394650110003");
-        secondProduct.setProductId("2");
-        secondProduct.setPrice(new BigDecimal(39.99));
-        secondProduct.setDescription("Diva Jeans");
-        products.add(secondProduct);
-        productRepository.save(secondProduct);
-    }
 
     @Test
     public void returnProductBasedOnPriceGreaterThan30(){
